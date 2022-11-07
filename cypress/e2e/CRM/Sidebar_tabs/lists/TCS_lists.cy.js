@@ -15,7 +15,7 @@ describe('TCS', () => {
     it('manager selection', () => {       //Менеджер определенный
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[1]/div[1]/button')
         .click();
-        cy.xpath('//*[@id="user-button"]')
+        cy.xpath('/html/body/div[1]/div/div/div[2]/div[1]/div[1]/div[1]/div/input')
         .click({force:true})
         .clear()
         .type('Максим')
@@ -28,7 +28,7 @@ describe('TCS', () => {
         })
 
 
-        it('version serch', () => {
+        it('version search', () => {
             cy.xpath('/html/body/div[1]/div/div/div[2]/div[1]/div[1]/div[1]/button')            //поиск по версии
             .click();
             cy.xpath('/html/body/div[1]/div/div/div[2]/div[1]/div[1]/div[1]/div/div/a[1]')
@@ -36,7 +36,7 @@ describe('TCS', () => {
             cy.xpath('/html/body/div[1]/div/div/div[2]/div[1]/form[2]/input')
             .type('1111').should('have.value', '1111')
             cy.xpath('/html/body/div[1]/div/div/div[2]/div[1]/form[2]/span/button')
-            .click().wait(2000);
+            .click().wait(4000);
             cy.xpath('/html/body/div[1]/div/div/div[2]/div[2]/div/table/tbody/tr/td[5]')
             .should('have.contain', '1111')
         })
@@ -56,7 +56,7 @@ describe('TCS', () => {
         })
 
 
-        it('status server.online', () =>{
+        it('status server.offline', () =>{
             cy.xpath('/html/body/div[1]/div/div/div[2]/div[1]/div[1]/div[1]/button')            //статус офлайн
             .click();
             cy.xpath('/html/body/div[1]/div/div/div[2]/div[1]/div[1]/div[1]/div/div/a[1]')
@@ -65,6 +65,7 @@ describe('TCS', () => {
             .click();
             cy.xpath('/html/body/div[1]/div/div/div[2]/div[1]/div[3]/a[3]')
             .should('have.class', 'button-group-item status-offline active')
+            .wait(3000)
             cy.xpath('/html/body/div[1]/div/div/div[2]/div[2]/div/table/tbody/tr/td[6]')
             .should('have.contain', 'offline')                                                        
     })

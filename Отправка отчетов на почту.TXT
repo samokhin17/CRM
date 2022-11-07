@@ -1,0 +1,227 @@
+date /T
+:: УДАЛЯЕМ РАНЕЕ СОЗДАННЫЕ ОТЧЕТЫ
+cd "C:\Users\Public\MCU"
+del "C:\Users\Public\MCU\vtsrv-test\test\logs\*.*" /s /q
+del "C:\Users\Public\MCU\vtsrv-test\test\out\*.*"  /s /q 
+del "C:\Users\Public\MCU\vtsrv-test\test\failures\*.*" /s /q
+del "C:\Users\Public\MCU\vtsrv-test\test\failures.zip" /s /q
+del "C:\Users\Public\MCU\log.txt" /s /q
+   MD "C:\Users\Public\MCU\vtsrv-test\test\logs"
+   MD "C:\Users\Public\MCU\vtsrv-test\test\out"
+   MD "C:\Users\Public\MCU\vtsrv-test\test\failures"
+
+
+:: УВЕДОМЛЯЕМ ЭРАСТА КУНЕНКОВА О СТАРТЕ СЬЮТА
+cd "C:\Users\Public\MCU\blat"
+call send_start_notification
+IF ERRORLEVEL 1 (
+echo "ПРОБЛЕМА С УВЕДОМЛЯЕМ О СТАРТЕ СЬЮТА"
+EXIT 0
+)
+echo "Уведомили о старте" 
+ 
+:: СТЯГИВАЕМ ПОСЛЕДНЮЮ ВЕРСИЮ VTSRV-SOURCE
+cd "C:\Users\Public\MCU\vtsrv\"
+dir
+IF ERRORLEVEL 1 (
+echo "ПРОБЛЕМА С ПЕРЕХОДОМ В C:\Users\Public\MCU\vtsrv\" 
+EXIT 0
+)
+git pull --recurse-submodules "https://birchenko:мойпароль@gitlab.trueconf.com/trueconf-mcu/core/vtsrv.git"
+IF ERRORLEVEL 1 (
+echo "ПРОБЛЕМА СО СТЯГИВАНИЕМ VTSRV-SOURCE" 
+EXIT 0 
+)
+echo "Стянули VTSRV-SOURCE" 
+
+:: СТЯГИВАЕМ ПОСЛЕДНЮЮ ВЕРСИЮ VTSRV-TEST
+cd "C:\Users\Public\MCU\vtsrv-test"
+IF ERRORLEVEL 1 (
+echo "ПРОБЛЕМА С ПЕРЕХОДОМ В С:\Users\Public\MCU\vtsrv-test\" 
+EXIT 0
+)
+git pull "https://birchenko:мойпароль@gitlab.trueconf.com/trueconf-mcu/tools/vtsrv-test.git"
+IF ERRORLEVEL 1 (
+echo "ПРОБЛЕМА СО СТЯГИВАНИЕМ VTSRV-TEST" 
+EXIT 0
+)
+
+:: КОМПРИЛИРУЕМ ИСПОЛНЯЕМЫЙ ФАЙЛ ИСПОЛЬЗУЯ НАБОР ИНСТРУКЦИЙ makefile
+cd "C:\Users\Public\MCU\vtsrv\vile\build\gnu-target\"
+IF ERRORLEVEL 1 (
+echo "ПРОБЛЕМА С ПЕРЕХОДОМ В C:\Users\Public\MCU\vtsrv\vile\build\gnu-target\" 
+EXIT 0
+)
+call mingw mingw32-make PLATFORM=x64 -j 4
+
+:: ЗАПУСКАЕМ ТЕСТЫ ИСПОЛЬЗУЯ БАТНИК launch
+cd "C:\Users\Public\MCU\vtsrv-test\test"
+IF ERRORLEVEL 1 (
+echo "ПРОБЛЕМА С ПЕРЕХОДОМ В C:\Users\Public\MCU\vtsrv-test\test" 
+EXIT 0
+)
+call launch testbench all
+:: IF ERRORLEVEL 1 (
+:: echo "ПРОБЛЕМА С ЗАПУСКОМ ТЕСТОВ" 
+:: )
+
+:: ПЕРЕИМЕНОВЫВАЕМ СОЗДАННЫЙ ОТЧЕТ в report.txt 
+cd "C:\Users\Public\MCU\vtsrv-test\test\logs\"
+IF ERRORLEVEL 1 (
+echo "C:\Users\Public\MCU\vtsrv-test\test\logs\" 
+EXIT 0
+)
+
+dir
+set cnt=0
+set name=unknown 
+for %%A in (*.*) do set /a cnt+=1 & set name=%%~nxA
+echo File count = %cnt%
+echo old File name = %name%
+ren %name% report.txt
+dir
+IF ERRORLEVEL 1 (
+echo "ПРОБЛЕМА С ПЕРЕИМЕНОВАНИЕМ ФАЙЛОВ ОТЧЕТОВ" 
+EXIT 0
+)
+
+:: АРХИВИРУЕМ ЛОГИ ЗАФЕЙЛЕНЫХ СЦЕНАРИЕВ
+cd "c:\Program Files\7-Zip"
+IF ERRORLEVEL 1 (
+echo "ПРОБЛЕМА С ПЕРЕХОДОМ В c:\Program Files\7-Zip" 
+EXIT 0
+)
+7z.exe a c:\Users\Public\MCU\vtsrv-test\test\failures.zip c:\Users\Public\MCU\vtsrv-test\test\failures\*.* || echo 1 
+
+:: ОТПРАВКА ОТЧЕТА - конфиг отчета - в самом запускаемом батнике - 
+cd "C:\Users\Public\MCU\blat"
+call send_email
+IF ERRORLEVEL 1 (
+echo "ПРОБЛЕМА С ОТПРАВКОЙ ОТЧЕТОВ"
+EXIT 0
+)
+
+
+
+отификация
+rem *** Путь к программе blat.exe ***
+set file_blat=C:\Users\Public\MCU\blat\full\blat.exe
+rem *** Путь к файлу с текстом сообщения ***
+set file_text=C:\Users\Public\MCU\blat\start_notification.txt
+rem *** Путь к файлу для сохранения лога ***
+set file_log=C:\Users\Public\MCU\blat\start_notification_log.txt
+
+rem *** Данные отправителя ***
+set from_server=mail.trueconf.com
+set from_port=25
+set from_mail=birchenko@trueconf.ru
+set from_name=birchenko
+set from_pass=мойпароль
+
+rem *** Данные получателя ***
+set to_mail=birchenko@trueconf.ru,kunenkov@trueconf.ru,cherkashin@trueconf.ru
+::set to_mail=birchenko@trueconf.ru,cherkashin@trueconf.ru
+rem *** set to_mail=eugenebirchenko@gmail.com
+set to_subject="[Tests]MCU:VTSRV-TESTS WERE ALREADY RUNNED %DATE%"
+
+ %file_blat%  %file_text% -server %from_server%:%from_port% -charset Windows-1251 -f %from_mail% -u %from_name% -pw %from_pass% -to %to_mail% -s %to_subject% -log %file_log%
+
+
+
+end_email
+rem *** Путь к программе blat.exe ***
+set file_blat=C:\Users\Public\MCU\blat\full\blat.exe
+rem *** Путь к файлу с текстом сообщения ***
+set file_text=C:\Users\Public\MCU\vtsrv-test\test\logs\report.txt
+rem *** Путь к файлу для сохранения лога ***
+set file_log=C:\Users\Public\MCU\blat\blat_log.txt
+rem *** Атачмент к письму ***
+set attach_log=C:\Users\Public\MCU\vtsrv-test\test\failures.zip
+
+rem *** Данные отправителя ***
+set from_server=mail.trueconf.com
+set from_port=25
+set from_mail=birchenko@trueconf.ru
+set from_name=birchenko
+set from_pass=мой пароль
+
+rem *** Данные получателя ***
+set to_mail=birchenko@trueconf.ru,kunenkov@trueconf.ru,cherkashin@trueconf.ru
+::set to_mail=birchenko@trueconf.ru,cherkashin@trueconf.ru
+rem *** set to_mail=eugenebirchenko@gmail.com
+set to_subject="[Tests] MCU:VTSRV %DATE%"
+
+rem *** Отправка сообщения(ELSE используетс для случаев если атачмента нет или есть) ***
+
+
+IF EXIST "C:\Users\Public\MCU\vtsrv-test\test\failures.zip" (
+echo Attachment exist
+  %file_blat% %file_text% -server %from_server%:%from_port% -f %from_mail% -u %from_name% -pw %from_pass% -to %to_mail% -s %to_subject% -attach %attach_log% -log %file_log% 
+) ELSE (
+echo Attachment is not exist
+  %file_blat% %file_text% -server %from_server%:%from_port% -f %from_mail% -u %from_name% -pw %from_pass% -to %to_mail% -s %to_subject% -log %file_log% 
+)end_email
+rem *** Путь к программе blat.exe ***
+set file_blat=C:\Users\Public\MCU\blat\full\blat.exe
+rem *** Путь к файлу с текстом сообщения ***
+set file_text=C:\Users\Public\MCU\vtsrv-test\test\logs\report.txt
+rem *** Путь к файлу для сохранения лога ***
+set file_log=C:\Users\Public\MCU\blat\blat_log.txt
+rem *** Атачмент к письму ***
+set attach_log=C:\Users\Public\MCU\vtsrv-test\test\failures.zip
+
+rem *** Данные отправителя ***
+set from_server=mail.trueconf.com
+set from_port=25
+set from_mail=birchenko@trueconf.ru
+set from_name=birchenko
+set from_pass=мой пароль
+
+rem *** Данные получателя ***
+set to_mail=birchenko@trueconf.ru,kunenkov@trueconf.ru,cherkashin@trueconf.ru
+::set to_mail=birchenko@trueconf.ru,cherkashin@trueconf.ru
+rem *** set to_mail=eugenebirchenko@gmail.com
+set to_subject="[Tests] MCU:VTSRV %DATE%"
+
+rem *** Отправка сообщения(ELSE используетс для случаев если атачмента нет или есть) ***
+
+
+IF EXIST "C:\Users\Public\MCU\vtsrv-test\test\failures.zip" (
+echo Attachment exist
+  %file_blat% %file_text% -server %from_server%:%from_port% -f %from_mail% -u %from_name% -pw %from_pass% -to %to_mail% -s %to_subject% -attach %attach_log% -log %file_log% 
+) ELSE (
+echo Attachment is not exist
+  %file_blat% %file_text% -server %from_server%:%from_port% -f %from_mail% -u %from_name% -pw %from_pass% -to %to_mail% -s %to_subject% -log %file_log% 
+)end_email
+rem *** Путь к программе blat.exe ***
+set file_blat=C:\Users\Public\MCU\blat\full\blat.exe
+rem *** Путь к файлу с текстом сообщения ***
+set file_text=C:\Users\Public\MCU\vtsrv-test\test\logs\report.txt
+rem *** Путь к файлу для сохранения лога ***
+set file_log=C:\Users\Public\MCU\blat\blat_log.txt
+rem *** Атачмент к письму ***
+set attach_log=C:\Users\Public\MCU\vtsrv-test\test\failures.zip
+
+rem *** Данные отправителя ***
+set from_server=mail.trueconf.com
+set from_port=25
+set from_mail=birchenko@trueconf.ru
+set from_name=birchenko
+set from_pass=мой пароль
+
+rem *** Данные получателя ***
+set to_mail=birchenko@trueconf.ru,kunenkov@trueconf.ru,cherkashin@trueconf.ru
+::set to_mail=birchenko@trueconf.ru,cherkashin@trueconf.ru
+rem *** set to_mail=eugenebirchenko@gmail.com
+set to_subject="[Tests] MCU:VTSRV %DATE%"
+
+rem *** Отправка сообщения(ELSE используетс для случаев если атачмента нет или есть) ***
+
+
+IF EXIST "C:\Users\Public\MCU\vtsrv-test\test\failures.zip" (
+echo Attachment exist
+  %file_blat% %file_text% -server %from_server%:%from_port% -f %from_mail% -u %from_name% -pw %from_pass% -to %to_mail% -s %to_subject% -attach %attach_log% -log %file_log% 
+) ELSE (
+echo Attachment is not exist
+  %file_blat% %file_text% -server %from_server%:%from_port% -f %from_mail% -u %from_name% -pw %from_pass% -to %to_mail% -s %to_subject% -log %file_log% 
+)

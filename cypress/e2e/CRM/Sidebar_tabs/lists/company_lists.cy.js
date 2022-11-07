@@ -48,10 +48,10 @@ it('lists manager selection', () => {                           //проверк
         .click();
         cy.xpath('/html/body/div[1]/div/div/div[2]/div[1]/div[1]/div[4]/div/div/a[1]')
         .click();
-        cy.xpath('/html/body/div[1]/div/div/div[2]/div[1]/form/input')
+        cy.get('[id="search"]')
         .type('autotest')
         .should('have.value', 'autotest');
-        cy.xpath('/html/body/div[1]/div/div/div[2]/div[1]/form/span/button')
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/form[1]/span')
         .click();
         cy.xpath('/html/body/div[1]/div/div/div[2]/div[2]/div/div/table/tbody/tr/td[2]')
         .should('have.contain', 'autotest')

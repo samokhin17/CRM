@@ -121,7 +121,8 @@ describe('Contact_profile', () => {
             .click()
             .wait(2000);
         cy.xpath('//*[@id="email"]')
-            .type('samokhin' + rand_num + '@trueconf.ru');
+            .type('samokhin' + rand_num + '@trueconf.ru')
+            .wait(2000)
         cy.xpath('//*[@id="contactModal"]/div/div/div[2]/form/div[2]/button')
             .click()
             .wait(2000);

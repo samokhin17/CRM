@@ -40,16 +40,17 @@ describe('Create_Request', () => {
     it('find/change type request', () => {
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[1]/td[2]/div')
             .should('have.class', 'react-div');
-cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[1]/td[2]/div/i')
-.click({force:true});
-cy.xpath('//*[@id="type"]')
-.select('partnership').should('have.value', 'partnership');
-cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/div/input[1]')
-.type('12345');
-cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/div/input[2]')
-.click()
-.wait(5000);
-cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[1]/td[2]/div')
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[1]/td[2]/div/i')
+            .click({force:true});
+        cy.xpath('/html/body/div[1]/div/div/div[2]/div/div/form/table/tbody/tr[1]/td[2]/div/select')
+            .select('partnership')
+            .should('have.value', 'partnership');
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/div/input[1]')
+            .type('12345');
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/div/input[2]')
+            .click()
+            .wait(5000);
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[1]/td[2]/div')
             .should('have.contain', 'partnership');
     })
 
@@ -106,15 +107,16 @@ cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[3]/td[2]
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[4]/td[2]/div')
         .should('have.class', 'react-div');
 cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[4]/td[2]/div/i')
-.click({force:true});
-cy.xpath('//*[@id="description"]')
-.type('Kuzubov AUTOTEST')
+        .click({force:true});
+cy.xpath('/html/body/div[1]/div/div/div[2]/div/div/form/table/tbody/tr[4]/td[2]/div/textarea')
+        // .click()
+        .type('Kuzubov AUTOTEST')
         .wait(4000);
 cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/div/input[1]')
-.type('12345');
+        .type('12345');
 cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/div/input[2]')
-.click()
-.wait(5000);
+        .click()
+        .wait(5000);
 cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[4]/td[2]/div')
         .should('have.contain', 'Kuzubov AUTOTEST');
  })
@@ -122,17 +124,20 @@ cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[4]/td[2]
 
    //нашел и изменил владельца заявки
    it('find/change owner request', () => {
+    const owners = ['Александр Самохин', 'Сара Мислимова', 'Семен Самойлов', 'Артур Глушенко']
+        let getRandomOwner = Math.floor(Math.random() * owners.length)
+        var owner = owners[getRandomOwner];
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[5]/td[2]/div')
         .should('have.class', 'react-div');
 cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[5]/td[2]/div/i')
 .click({force:true});
-cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[5]/td[2]/div/input[1]')
+cy.xpath('/html/body/div[1]/div/div/div[2]/div/div/form/table/tbody/tr[5]/td[2]/div/input[1]')
 .clear()
-.type('Maksim Kuzubov')
+.type(owner)
         .wait(4000)
         .type('{downarrow}')
         .type('{enter}')
-        .should('have.value', 'Maksim Kuzubov')
+        .should('have.value', owner)
         .wait(2000);
 cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/div/input[1]')
 .type('12345');
@@ -140,7 +145,7 @@ cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/div/input[2]')
 .click()
 .wait(5000);
 cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[5]/td[2]/div/span')
-        .should('have.value', 'Maksim Kuzubov');
+        .should('have.value', owner);
 })
 
 

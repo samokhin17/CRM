@@ -1,5 +1,9 @@
 describe('Projects', () => {
  it('added project', () => {
+    function getRandomNum(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+    let num = String(getRandomNum(1111, 9999));
         cy.visit('https://beta.crm.trueconf.com');
         cy.get('.glyphicon-folder-close.span-align')
         .click()
@@ -27,6 +31,12 @@ describe('Projects', () => {
         .click()
         .type('11111')
         .should('have.value', '11111');
+    cy.xpath('/html/body/div[2]/div/div/div/div[2]/form/div[1]/div[5]/div/input')
+        .click()
+        .type('9999');
+    cy.xpath('/html/body/div[2]/div/div/div/div[2]/form/div[1]/div[6]/div/input')
+        .click()
+        .type('0');
     cy.xpath('//*[@id="form"]/div[2]/button')
         .click();
 })
@@ -36,11 +46,15 @@ describe('Project_profile', () => {
     beforeEach(() => {
         cy.visit('https://beta.crm.trueconf.com');
         cy.get('.glyphicon-folder-close.span-align')
-        .click()
-        .wait(5000);
+            .click()
+            .wait(5000);
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[1]/div/button')
+            .click({force:true})
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[1]/div/div/div/a[1]')
+            .click({force:true})
         cy.xpath('//*[@id="table"]/tr[1]/td[1]/a')
-        .click()
-        .wait(5000)
+            .click()
+            .wait(5000)
     })
 
 
@@ -85,7 +99,7 @@ it('fing/chech contact', () => {
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[5]/td[2]/div')
         .should('have.class', 'react-div');
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[5]/td[2]/div/a')
-        .should('have.contain', 'Максим Кузубов')
+        .should('have.contain', 'Тестовый сертификат')
             })
 
 
@@ -95,7 +109,7 @@ it('fing/chech contact', () => {
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[6]/td[2]/div')
         .should('have.class', 'react-div');
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[6]/td[2]/div/span')
-        .should('be.empty')
+        .should('have.contain', '9999')
             })
 
 
@@ -105,7 +119,7 @@ it('fing/chech contact', () => {
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[7]/td[2]/div')
         .should('have.class', 'react-div');
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[7]/td[2]/div/span')
-        .should('be.empty')
+        .should('have.contain', '0')
             })
 
 

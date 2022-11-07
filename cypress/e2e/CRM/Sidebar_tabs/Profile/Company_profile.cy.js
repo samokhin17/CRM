@@ -166,6 +166,7 @@ describe('Company', () => {
         cy.log('Нажимаем "Все"');
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[1]/div[4]/div/div/a[1]')
             .click({force:true})
+            .wait(3000)
         cy.log('Открываем профиль компании');
         cy.xpath('/html/body/div[1]/div/div/div[2]/div[2]/div/div/table/tbody/tr[1]/td[2]/a')
             .click().wait(3000);
@@ -235,7 +236,8 @@ describe('Company', () => {
             .click({force:true});
         cy.log('Нажимаем "Все"'); 
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[1]/div[4]/div/div/a[1]')
-            .click({force:true});
+            .click({force:true})
+            .wait(3000);
         cy.log('Открываем профиль компании');
         cy.xpath('//*[@id="table"]/tr[1]/td[2]/a')
             .click().wait(3000);
@@ -248,11 +250,12 @@ describe('Company', () => {
         cy.log('Вводим новый город');
         cy.xpath('//*[@id="area"]')
             .clear()
-            .type('Ашхабад')
+            .type('Новосибирск')
             .wait(2000)
             .type('{downarrow}')
+            .type('{downarrow}')
             .type('{enter}')
-            .should('have.value', 'Ашхабад');
+            .should('have.value', 'г Новосибирск')
         cy.log('Вводим "Примечание" перед сохранением');
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/div/input[1]')
             .click({ force: true })
@@ -262,8 +265,8 @@ describe('Company', () => {
             .click({ force: true })
             .wait(5000);
         cy.log('Проверяем, что город изменился');
-        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[5]/td[2]/div')
-            .should('have.contain', 'Ашхабад')
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/div/form/table/tbody/tr[6]/td[2]/div')
+            .should('have.contain', 'г Новосибирск')
     })
 
 
@@ -327,7 +330,8 @@ describe('Company', () => {
             .click({force:true});
         cy.log('Нажимаем "Все"'); 
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[1]/div[4]/div/div/a[1]')
-            .click({force:true});
+            .click({force:true})
+            .wait(2000);
         cy.log('Открываем профиль компании');
         cy.xpath('/html/body/div[1]/div/div/div[2]/div[2]/div/div/table/tbody/tr[1]/td[2]/a')
             .click().wait(3000);
@@ -495,7 +499,7 @@ describe('Company', () => {
     })
 
 
-    it('find/change ОКВЕД', () => {       // нашел и изменил Оквэд компании
+    it('find/change OKVED', () => {       // нашел и изменил Оквэд компании
         cy.log('Открываем профиль компании');
         cy.xpath('/html/body/div[1]/div/div/div[2]/div[2]/div/div/table/tbody/tr[1]/td[2]/a')
             .click().wait(3000);

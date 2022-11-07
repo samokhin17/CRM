@@ -1,7 +1,19 @@
 const { defineConfig } = require('cypress')
-
+// npx cypress run --reporter cypress-multi-reporters --spec .\cypress\e2e\CRM\Sidebar_tabs\lists - запуск теста с репортером
+// npx mochawesome-merge .\cypress\reports\mocha\*.json | out-file -encoding ascii .\cypress\reports\merged.json - мерж всех json в 1 общий
+// npx marge ./cypress/reports/merged.json --reportir ./ --inline - генерация html из общего json
 module.exports = defineConfig({
-  reporter: 'mochawesome',
+  reporter: 'cypress-multi-reporters',
+  reporterOptions: {
+    reporterEnabled: 'mochawesome',
+    mochawesomeReporterOptions: {
+      reportDir: 'cypress/reports/mocha',
+      quite: 'true',
+      overwrite: 'false',
+      html: 'false',
+      json: 'true',
+    }
+  },
   viewportWidth: 1920,
   viewportHeight: 1080,
   numTestsKeptInMemory: 10000,

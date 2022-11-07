@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@cypress/mocha-teamcity-reporter": "^1.0.0",
-    "cypress": "^10.3.1",
+    "cypress": "^10.11.0",
     "cypress-multi-reporters": "^1.6.1",
     "cypress-xpath": "^2.0.0",
     "mocha": "^9.2.2",
@@ -19,6 +19,12 @@
     "mochawesome-merge": "^4.2.1",
     "mochawesome-report-generator": "^6.2.0",
     "request": "^2.88.2"
+  },
+  "scripts": {
+    "delete-mochawesome-folder": "rm -f mochawesome-report/*.json",
+    "e2e_mochawesome": "yarn cypress run --spec cypress/integration/Tests/*.js",
+    "merge-json": "npx mochawesome-merge --reportDir mochawesome-report > mochawesome1.json",
+    "html-generator": " npx mochawesome-report-generator mochawesome1.json"
   },
   "author": "Samokhin",
   "license": "ISC"

@@ -101,7 +101,7 @@ describe('Tasks', () => {
         cy.xpath('//*[@id="table"]/tr[1]/td[2]/a')
             .click().wait(3000);
         cy.xpath('//*[@id="manager"]')
-            .should('have.value', 'Максим Кузубов')
+            .should('have.value', 'Тестовый сертификат')
             .clear()
             .type('Maksim Kuzubov')
             .wait(2000)
@@ -136,10 +136,10 @@ describe('Tasks', () => {
         cy.xpath('//*[@id="taskForm"]/button').click()
             .wait(5000);
 
-        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[2]/div[1]/div[3]/button')
-            .click().wait(2000);
-        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[2]/div[1]/div[3]/div/div/a[1]')
-            .click().wait(3000);
+        // cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[2]/div[1]/div[3]/button')
+        //     .click().wait(2000);
+        // cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[2]/div[1]/div[3]/div/div/a[1]')
+        //     .click().wait(3000);
         cy.xpath('//*[@id="table"]/tr[1]/td[5]')
             .should('have.contain', 'autotest12345')
     })
@@ -162,10 +162,10 @@ describe('Tasks', () => {
         cy.xpath('//*[@id="taskForm"]/button').click()
             .wait(5000);
 
-        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[2]/div[1]/div[3]/button')
-            .click().wait(2000);
-        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[2]/div[1]/div[3]/div/div/a[1]')
-            .click().wait(3000);
+        // cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[2]/div[1]/div[3]/button')
+        //     .click().wait(2000);
+        // cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[2]/div[1]/div[3]/div/div/a[1]')
+        //     .click().wait(3000);
         cy.xpath('//*[@id="table"]/tr[1]/td[3]')
             .should('have.contain', '1autotest')
     })
@@ -180,20 +180,20 @@ describe('Tasks', () => {
             .wait(2000)
             .type('{downarrow}')
             .type('{enter}')
-            .should('have.value', 'TEST TC');
+            .should('have.value', 'Test TC');
         cy.xpath('//*[@id="note"]')
             .click()
             .type('12345');
         cy.xpath('//*[@id="taskForm"]/button').click()
             .wait(5000);
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[2]/div[1]/div[3]/button')
-            .click().wait(2000);
+            .click({force:true}).wait(2000);
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[2]/div[1]/div[3]/div/div/a[1]')
             .click().wait(3000);
         cy.xpath('//*[@id="table"]/tr[1]/td[2]/a')
             .click().wait(3000);
         cy.xpath('//*[@id="contact_name"]')
-            .should('have.value', 'TEST TC')
+            .should('have.value', 'Test TC')
     })
 
     it('find/change company', () => {       // нашел/изменил компанию таска
@@ -211,10 +211,10 @@ describe('Tasks', () => {
             .type('12345');
         cy.xpath('//*[@id="taskForm"]/button').click()
             .wait(5000);
-        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[2]/div[1]/div[3]/button')
-            .click().wait(2000);
-        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[2]/div[1]/div[3]/div/div/a[1]')
-            .click().wait(3000);
+        // cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[2]/div[1]/div[3]/button')
+        //     .click().wait(2000);
+        // cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[2]/div[1]/div[3]/div/div/a[1]')
+        //     .click().wait(3000);
         cy.xpath('//*[@id="table"]/tr[1]/td[4]')
             .should('have.contain', 'test tc')
     })

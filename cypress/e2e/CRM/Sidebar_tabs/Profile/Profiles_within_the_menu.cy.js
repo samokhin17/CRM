@@ -1,13 +1,14 @@
-describe('Profile Users', () => {
+describe('Profile Users', () => { //Тут все тесты доделать, внести ретактирование
     beforeEach(() => {
         cy.visit('https://beta.crm.trueconf.com');
-        cy.xpath('//*[@id="wrapper"]/aside/div[2]/ul/li[10]/a/p/i')
-        .click();      //Перешли в меню
-        cy.xpath('//*[@id="wrapper"]/aside/div[2]/ul/li[10]/ul/li[1]/a')
-        .click({force:true});
+        cy.xpath('//*[@id="wrapper"]/aside/div[2]/ul/li[12]/a/p/i')
+          .click()
+          .wait(2000);
+        cy.xpath('//*[@id="wrapper"]/aside/div[2]/ul/li[12]/ul/li[1]/a')
+          .click({force:true});
         cy.xpath('//*[@id="table"]/tr[1]/td[1]/a')
-        .click()
-        .wait(5000);   
+          .click()
+          .wait(5000);   
       })
 
       //нашел и проверил блок имя
@@ -183,17 +184,41 @@ describe('Profile Users', () => {
     })
 
 
+    describe('Create a Group', () => {
+    it('create a group', () => {
+      function getRandomNum(min, max) {
+      return Math.floor(Math.random() * (max - min)) + min;
+  }
+    let name = String('Александр' + getRandomNum(1111, 9999));
+    cy.visit('https://beta.crm.trueconf.com');
+    cy.xpath('//*[@id="wrapper"]/aside/div[2]/ul/li[12]/a/p/i')
+      .click();      //Перешли в меню
+    cy.xpath('//*[@id="wrapper"]/aside/div[2]/ul/li[12]/ul/li[2]/a')
+      .click({force:true});
+    cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div/button')
+      .click({force:true})
+    cy.xpath('/html/body/div[2]/div/div/div/div[2]/form/div/div[1]/div/input')
+      .click()
+      .type(name)
+    cy.xpath('/html/body/div[2]/div/div/div/div[2]/form/div/div[2]/div[2]/input[1]')
+      .click()
+      .type('Russia')
+      .type('{downarrow}')
+      .type('{enter}')
+    cy.xpath('//*[@id="form"]/button')
+      .click()
+})});
 
     describe('Profile Groups', () => {
         beforeEach(() => {
             cy.visit('https://beta.crm.trueconf.com');
-            cy.xpath('//*[@id="wrapper"]/aside/div[2]/ul/li[10]/a/p/i')
-            .click();      //Перешли в меню
-            cy.xpath('//*[@id="wrapper"]/aside/div[2]/ul/li[10]/ul/li[2]/a')
-            .click({force:true});
+            cy.xpath('//*[@id="wrapper"]/aside/div[2]/ul/li[12]/a/p/i')
+              .click();      //Перешли в меню
+            cy.xpath('//*[@id="wrapper"]/aside/div[2]/ul/li[12]/ul/li[2]/a')
+              .click({force:true});
             cy.xpath('//*[@id="table"]/tr[1]/td[1]/a')
-            .click()
-            .wait(5000);   
+              .click()
+              .wait(5000);   
           })
 
             //нашел и проверил блок имя
@@ -206,7 +231,7 @@ describe('Profile Users', () => {
   //нашел и проверил блок создавший
   it('fing/chech name', () => {
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[2]/td[2]/a')
-    .should('have.contain', 'Максим Кузубов');
+    .should('have.contain', name);
 })
 
 
@@ -234,7 +259,7 @@ it('fing/chech Users tab', () => {
     .click()
     .should('have.class', 'active');
     cy.xpath('//*[@id="table_users_wrapper"]')
-    .should('have.class', 'dataTables_empty');
+    .should('have.class', 'dataTables_wrapper no-footer');
   })
 
 

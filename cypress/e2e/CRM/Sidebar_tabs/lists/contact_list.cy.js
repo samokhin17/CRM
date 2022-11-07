@@ -17,6 +17,13 @@ beforeEach(() => {
         .should('have.value', 'Тестирование')
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/form[1]/span/button')
         .click().wait(4000);
+        cy.log('Нажимаем "Выбираем менеджера"');
+        cy.get('[class="manager-select default-select"]')
+            .click({force:true})
+        cy.log('Нажимаем "Все"');
+        cy.get('[class="btn btn-sm showallmanager"]')
+            .click({force:true})
+            .wait(3000)
        cy.xpath('/html/body/div[1]/div/div/div[2]/div[2]/div/table/tbody/tr')
        .should('have.contain', 'Тестирование')
     })

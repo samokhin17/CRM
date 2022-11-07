@@ -37,13 +37,13 @@ describe('Создание встречи', () => {
 
 
 describe('Профили встречь', () => {
-    const new_name = 'Samokhin_Test_Meeting' + String(Math.random())
     beforeEach(() => {
         cy.log('Заходим на сайт');
         cy.visit('https://beta.crm.trueconf.com');
         cy.log('Открываем карточку "Встречи"');
         cy.get('.glyphicon-glass.span-align')
-            .click(); 
+            .click()
+            .wait(2000);
     })
 
 //нашел и изменил имя
@@ -63,7 +63,7 @@ describe('Профили встречь', () => {
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[1]/td[2]/div/input')
             .click()
             .clear()
-            .type(new_name);
+            .type(meeting_name);
         cy.log('Вводим "Примечание" перед сохранением');
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/div/input[1]')
             .type('12345');
@@ -73,14 +73,14 @@ describe('Профили встречь', () => {
             .wait(5000);
         cy.log('Проверяем, что название изменилось');
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[1]/td[2]/div')
-            .should('have.contain', new_name);
+            .should('have.contain', meeting_name);
     })
 
 
 //нашел и изменил цель
     it('find/change goal', () => {
         cy.log('Открываем встречу');
-        cy.contains(new_name)
+        cy.contains(meeting_name)
             .click()
             .wait(5000);
         cy.log('Проверяем наличие цели');
@@ -109,7 +109,7 @@ describe('Профили встречь', () => {
         
 
 //нашел и изменил статус
-it.only('find/change status', () => {
+it('find/change status', () => {
     cy.log('Открываем встречу');
     cy.xpath('//*[@id="table"]/tr[1]/td[1]/a')
         .click();
@@ -118,171 +118,194 @@ it.only('find/change status', () => {
         .should('have.class', 'react-div');
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[3]/td[2]/div/span')
         .click({force:true});
-    cy.xpath('//*[@id="status"]')
-        .select('accepted');
+    cy.xpath('/html/body/div[1]/div/div/div[2]/div/form/table/tbody/tr[3]/td[2]/div/select')
+        .select('accepted')
+        .should('have.contain', 'accepted')
+        .wait(3000);
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/div/input[1]')
         .type('12345');
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/div/input[2]')
         .click()
         .wait(5000);
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[3]/td[2]/div')
-        .should('have.value', 'accepted')
-    })  
+        .should('have.contain', 'accepted')
+    });  
 
 
 
 
 //нашел и изменил адрес
 it('find/change adresses', () => {
+    cy.log('Открываем встречу');
+    cy.xpath('//*[@id="table"]/tr[1]/td[1]/a')
+        .click();
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[4]/td[2]/div')
-    .should('have.class', 'react-div')
+        .should('have.class', 'react-div')
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[4]/td[2]/div/i')
-    .click({force:true});
+        .click({force:true});
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[4]/td[2]/div/input')
-    .click()
-    .clear()
-    .type('55555')
+        .click()
+        .clear()
+        .type('55555')
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/div/input[1]')
-    .type('12345');
+        .type('12345');
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/div/input[2]')
-    .click()
-    .wait(5000);
+        .click()
+        .wait(5000);
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[4]/td[2]/div')
-    .should('have.contain', '55555')
+        .should('have.contain', '55555')
         }) 
 
 
         //нашел и изменил результат
 it('find/change result', () => {
+    cy.log('Открываем встречу');
+    cy.xpath('//*[@id="table"]/tr[1]/td[1]/a')
+        .click();
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[5]/td[2]/div')
-    .should('have.class', 'react-div')
+        .should('have.class', 'react-div')
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[5]/td[2]/div/i')
-    .click({force:true});
+        .click({force:true});
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[5]/td[2]/div/textarea')
-    .click()
-    .type('55555')
+        .click()
+        .type('55555')
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/div/input[1]')
-    .type('12345');
+        .type('12345');
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/div/input[2]')
-    .click()
-    .wait(5000);
+        .click()
+        .wait(5000);
     cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[5]/td[2]/div')
-    .should('have.contain', '55555')
+        .should('have.contain', '55555')
         }) 
 
 
        //нашел и изменил компанию
        it('find/change company', () => {
+        cy.log('Открываем встречу');
+        cy.xpath('//*[@id="table"]/tr[1]/td[1]/a')
+            .click();
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[6]/td[2]/div')
-        .should('have.class', 'react-div')
+            .should('have.class', 'react-div')
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[6]/td[2]/div/i')
-        .click({force:true});
+            .click({force:true});
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[6]/td[2]/div/input[1]')
-        .clear({force: true})
+            .clear({force: true})
             .type('Kuzubov AUTOTEST')
             .wait(3000)
             .type('{downarrow}')
             .type('{enter}')
             .should('have.value', 'Kuzubov AUTOTEST');
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/div/input[1]')
-        .type('12345');
+            .type('12345');
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/div/input[2]')
-        .click()
-        .wait(5000);
+            .click()
+            .wait(5000);
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[6]/td[2]/div')
-        .should('have.contain', 'Kuzubov AUTOTEST')
+            .should('have.contain', 'Kuzubov AUTOTEST')
             })
 
 
              //нашел и изменил дату назначения
        it('find/change appointment date', () => {
+        cy.log('Открываем встречу');
+        cy.xpath('//*[@id="table"]/tr[1]/td[1]/a')
+            .click();
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[7]/td[2]/div')
-        .should('have.class', 'react-div')
+            .should('have.class', 'react-div')
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[7]/td[2]/div/i')
-        .click({force:true});
+            .click({force:true});
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[7]/td[2]/div/input[1]')
-        .clear({force: true})
+            .clear({force: true})
             .type('10.10.2222 10:10', {force:true})
             .wait(3000)
             .should('have.value', '10.10.2222 10:10');
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/div/input[1]')
-        .type('12345');
+            .type('12345');
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/div/input[2]')
-        .click()
-        .wait(5000);
+            .click()
+            .wait(5000);
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[7]/td[2]/div')
-        .should('have.contain', '10.10.2222 10:10')
+            .should('have.contain', '10.10.2222 10:10')
             })
 
 
 
 //добавил заметку
 it('add note', () => {
-cy.xpath('//*[@id="wrapper"]/div/div/div[1]/div[1]/button')
-.click()
-.wait(3000);
-cy.xpath('//*[@id="description"]')
-.click()
-type('11111');
-cy.xpath('//*[@id="form"]/button')
-.click()
-.wait(3000);
-cy.xpath('//*[@id="wrapper"]/div/div/div[3]/div/ul/li[3]')
-.click();
-cy.xpath('//*[@id="notes"]/div/ul/li/div')
-.should('have.class', 'note');
+    cy.log('Открываем встречу');
+    cy.xpath('//*[@id="table"]/tr[1]/td[1]/a')
+        .click();
+    cy.xpath('//*[@id="wrapper"]/div/div/div[1]/div[1]/button')
+        .click()
+        .wait(3000);
+    cy.xpath('/html/body/div[3]/div/div/div/div[2]/form/div[1]/div/textarea')
+        .click()
+        .type('11111');
+    cy.xpath('//*[@id="form"]/button')
+        .click()
+        .wait(3000);
+    cy.xpath('//*[@id="wrapper"]/div/div/div[3]/div/ul/li[3]')
+        .click();
+    cy.xpath('//*[@id="notes"]/div/ul/li/div')
+        .should('have.class', 'note');
 })
 
 
 //добавил пользователя
 it('add user', () => {
+    cy.log('Открываем встречу');
+    cy.xpath('//*[@id="table"]/tr[1]/td[1]/a')
+        .click();
     cy.xpath('//*[@id="wrapper"]/div/div/div[1]/div[2]/button')
-    .click()
-    .wait(3000);
-    cy.xpath('//*[@id="user"]')
-    .click()
-    type('Maksim Kuzubov')
-    .wait(3000)
-            .type('{downarrow}')
-            .type('{enter}')
-            .should('have.value', 'Maksim Kuzubov');
-          cy.xpath('//*[@id="comment"]') 
-          .click()
-    type('Maksim Kuzubov')
-    .wait(3000); 
+        .click()
+        .wait(3000);
+    cy.xpath('/html/body/div[3]/div/div/div/div[2]/form/div[1]/div[1]/div/input[1]')
+        .click()
+        .type('Maksim Kuzubov')
+        .wait(3000)
+        .type('{downarrow}')
+        .type('{enter}')
+        .should('have.value', 'Maksim Kuzubov');
+    cy.xpath('/html/body/div[3]/div/div/div/div[2]/form/div[1]/div[2]/div/input') 
+        .click()
+        .type('Maksim Kuzubov')
+        .wait(3000); 
     cy.xpath('//*[@id="form"]/div[2]/button')
-    .click()
+        .click()
     .wait(3000);
     cy.xpath('//*[@id="wrapper"]/div/div/div[3]/div/ul/li[2]')
-    .click();
+        .click();
     cy.xpath('//*[@id="user"]/tbody/tr[1]')
-    .should('have.contain', 'Maksim Kuzubov');
+        .should('have.contain', 'Maksim Kuzubov');
     })
 
 
     //добавил контакт
-it('add user', () => {
+it('add contact', () => {
+    cy.log('Открываем встречу');
+    cy.xpath('//*[@id="table"]/tr[1]/td[1]/a')
+        .click();
     cy.xpath('//*[@id="wrapper"]/div/div/div[1]/div[3]/button')
-    .click()
-    .wait(3000);
-    cy.xpath('//*[@id="contact"]')
-    .click()
-    type('Максим Кузубов')
-    .wait(3000)
-            .type('{downarrow}')
-            .type('{enter}')
-            .should('have.value', 'Максим Кузубов');
-          cy.xpath('//*[@id="comment"]') 
-          .click()
-    type('Максим Кузубов')
-    .wait(3000); 
+        .click()
+        .wait(3000);
+    cy.xpath('/html/body/div[3]/div/div/div/div[2]/form/div[1]/div[1]/div/input[1]')
+        .click()
+        .type('Максим Кузубов')
+        .wait(3000)
+        .type('{downarrow}')
+        .type('{enter}')
+        .should('have.value', 'Максим Кузубов');
+    cy.xpath('/html/body/div[3]/div/div/div/div[2]/form/div[1]/div[2]/div/input') 
+        .click()
+        .type('Максим Кузубов')
+        .wait(3000); 
     cy.xpath('//*[@id="form"]/div[2]/button')
-    .click()
-    .wait(3000);
+        .click()
+        .wait(3000);
     cy.xpath('//*[@id="wrapper"]/div/div/div[3]/div/ul/li[1]')
-    .click();
+        .click();
     cy.xpath('//*[@id="user"]/tbody/tr[1]')
-    .should('have.contain', 'Максим Кузубов');
+        .should('have.contain', 'Максим Кузубов');
     })
 
 

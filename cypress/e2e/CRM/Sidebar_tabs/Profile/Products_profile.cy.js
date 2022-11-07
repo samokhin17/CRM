@@ -33,6 +33,10 @@ describe('TCS', () => {
         cy.xpath('//*[@id="wrapper"]/aside/div[2]/ul/li[6]/ul/li[1]/a')
             .click({ force: true })
             .wait(5000);
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[1]/div[1]/button')
+            .click({force:true})
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[1]/div[1]/div/div/a[1]')
+            .click()
         cy.xpath('//*[@id="table"]/tr[1]/td[2]/a')
             .click()
             .wait(4000)
@@ -52,20 +56,24 @@ describe('TCS', () => {
 
     //нашел и изменил имя сервера
     it('find/change server name', () => {
+        function getRandomTIN(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+        let name = String(getRandomTIN(1111, 9999));
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[2]/td[2]/div')
             .should('have.class', 'react-div');
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[2]/td[2]/div/i')
             .click({ force: true });
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[2]/td[2]/div/input')
             .clear()
-            .type('11111');
+            .type(name);
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/div/input[1]')
             .type('12345');
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/div/input[2]')
             .click()
             .wait(5000);
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[2]/td[2]/div')
-            .should('have.contain', '11111');
+            .should('have.contain', name);
     })
 
 
@@ -152,11 +160,11 @@ describe('TCS', () => {
 
     //добавил лицензию
     it('find/add License server', () => {
-        cy.xpath('//*[@id="wrapper"]/div/div/div[1]/div[4]/button')
-            .click()
+        cy.xpath('//*[@id="wrapper"]/div/div/div[1]/div[5]/button')
+            .click({force:true})
             .wait(3000);
-        cy.xpath('//*[@id="form"]/div[2]/button')
-            .click()
+        cy.xpath('//*[@id="form"]/div[3]/button')
+            .click({force:true})
             .wait(5000);
         cy.xpath('//*[@id="wrapper"]/div/div/div[3]/div/ul/li[1]/a')
             .click();
@@ -175,7 +183,7 @@ describe('TCS', () => {
             .click({ force: true })
             .clear()
             .type('10.08.2025', { force: true });
-        cy.xpath('//*[@id="form"]/button')
+        cy.xpath('//*[@id="form"]/div[3]/button')
             .click({ force: true })
             .wait(5000);
         cy.xpath('//*[@id="wrapper"]/div/div/div[3]/div/ul/li[1]/a')
@@ -187,10 +195,12 @@ describe('TCS', () => {
 
     // энтерпрайз мастер
     it('find/add Master License server', () => {
-        cy.xpath('//*[@id="wrapper"]/div/div/div[1]/div[6]/button')
+        cy.xpath('//*[@id="wrapper"]/div/div/div[1]/div[7]/button')
             .click()
             .wait(3000);
-        cy.xpath('//*[@id="form"]/div[2]/button')
+        cy.xpath('//*[@id="form"]/div[2]/div[2]/label')
+            .click({force:true})
+        cy.xpath('//*[@id="form"]/div[3]/button')
             .click()
             .wait(5000);
         cy.xpath('//*[@id="wrapper"]/div/div/div[3]/div/ul/li[1]/a')
@@ -203,12 +213,12 @@ describe('TCS', () => {
 
     // энтерпрайз slave
     it('find/add slave License server', () => {
-        cy.xpath('//*[@id="wrapper"]/div/div/div[1]/div[6]/button')
+        cy.xpath('//*[@id="wrapper"]/div/div/div[1]/div[7]/button')
             .click()
             .wait(3000);
-        cy.xpath('//*[@id="form"]/div[1]/div[5]/label/input')
+        cy.xpath('//*[@id="form"]/div[2]/div[3]/label/input')
             .click({ force: true })
-        cy.xpath('//*[@id="form"]/div[2]/button')
+        cy.xpath('//*[@id="form"]/div[3]/button')
             .click()
             .wait(5000);
         cy.xpath('//*[@id="wrapper"]/div/div/div[3]/div/ul/li[1]/a')
@@ -298,14 +308,18 @@ describe('Create MCU', () => {
 })
 
 
-describe('MCU', () => {
+describe.only('MCU', () => {
     beforeEach(() => {
         cy.visit('https://beta.crm.trueconf.com');
         cy.get('.icon-crm-servers.span-align').click();      //Перешли в продукты
         cy.xpath('//*[@id="wrapper"]/aside/div[2]/ul/li[6]/ul/li[2]/a')
             .click({ force: true })
             .wait(5000);
-        cy.xpath('//*[@id="table"]/tr[1]/td[1]/a')
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[1]/div[1]/button')
+            .click({force:true})
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[1]/div[1]/div/div/a[1]')
+            .click()
+        cy.xpath('//*[@id="table"]/tr[1]/td[2]/a')
             .click()
             .wait(4000);
     })
@@ -473,6 +487,10 @@ describe('Weathervane', () => {
         cy.xpath('//*[@id="wrapper"]/aside/div[2]/ul/li[6]/ul/li[3]/a')
             .click({ force: true })
             .wait(3000);
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[1]/div[1]/button')
+            .click({force:true})
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[1]/div[1]/div/div/a[1]')
+            .click()
         cy.xpath('//*[@id="table"]/tr[1]/td[1]/a')
             .click()
             .wait(5000);
@@ -511,9 +529,9 @@ describe('Weathervane', () => {
     it('find/change company', () => {
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[5]/td[2]/div')
             .should('have.class', 'react-div')
-        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[5]/td[2]/div/i')
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[6]/td[2]/div/i')
             .click({ force: true });
-        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[5]/td[2]/div/input[1]')
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[6]/td[2]/div/input[1]')
             .clear()
             .type('Kuzubov AUTOTEST')
             .wait(3000)
@@ -525,16 +543,16 @@ describe('Weathervane', () => {
         cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/div/input[2]')
             .click()
             .wait(5000);
-        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[5]/td[2]/div')
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[6]/td[2]/div/a')
             .should('have.contain', 'Kuzubov AUTOTEST')
-        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[6]/td[2]/div')
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[7]/td[2]/div/a')
             .should('have.contain', 'Kuzubov AUTOTEST')
     })
 
 
     //наличие блока Дата создания
     it('find/check Дата создания', () => {
-        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[7]/td[2]/span')
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div/form/table/tbody/tr[8]/td[2]/span')
             .should('have.class', 'react-item');
     })
 
@@ -545,13 +563,19 @@ describe('Weathervane', () => {
         cy.xpath('//*[@id="wrapper"]/div/div/div[1]/div/button')
             .click()
             .wait(4000);
-        cy.xpath('//*[@id="form"]/div/div[4]/button')
+        cy.xpath('//*[@id="form"]/div/div[2]/div[2]/button')
             .click()
             .wait(4000)
-        cy.xpath('//*[@id="wrapper"]/div/div/div[3]/div/ul/li[1]')
+        cy.xpath('//*[@id="form"]/div/div[1]/div[4]/div/input')
+            .click()
+            .type('1');
+        cy.xpath('//*[@id="form"]/div/div[1]/div[5]/div/input')
+            .click()
+            .type('1');
+        cy.xpath('//*[@id="form"]/div/div[2]/div[2]/button')
             .click();
         cy.xpath('//*[@id="licenses"]/div/div/table/tbody')
-            .should('have.class', 'vue-tbody')
+            .should('have.class', 'vue-tbody');
     })
 
 
@@ -613,6 +637,10 @@ describe('Room', () => {
         cy.xpath('//*[@id="wrapper"]/aside/div[2]/ul/li[6]/ul/li[4]/a')
             .click({ force: true })
             .wait(3000);
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[1]/div[1]/button')
+            .click({force:true})
+        cy.xpath('//*[@id="wrapper"]/div/div/div[2]/div[1]/div[1]/div[1]/div/div/a[1]')
+            .click()
         cy.xpath('//*[@id="table"]/tr[1]/td[1]/a')
             .click()
             .wait(5000);
